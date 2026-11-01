@@ -8,7 +8,7 @@ React client for the Node/Express service in `../DevTinder-backend`. The backend
 2. Start the client: `cd ../DevTinder-frontend && pnpm dev`
 3. Open the localhost URL printed by Vite.
 
-Vite proxies the frontend's root API paths to `http://127.0.0.1:7777`, which is the current backend port. This preserves the backend's cookie-based login locally.
+Vite proxies frontend `/api/*` requests to `http://127.0.0.1:7777`, which is the current backend port. This preserves the backend's cookie-based login locally.
 
 ## API integration
 
@@ -30,8 +30,8 @@ The client pages deliberately avoid `/login` and `/signup`, because those remain
 
 ## Deploying separately
 
-Copy `.env.example` to `.env.production` and set `VITE_API_URL` to the deployed backend origin. The frontend sends cookies with every protected API request.
+Set `VITE_API_URL=/api` before building. The browser then requests `/api/signup`, `/api/login`, and so on; Nginx forwards them to the Node API on port `7777` while removing the `/api` prefix. The frontend sends cookies with every protected API request, without requiring CORS.
 
-Because the current backend does not configure CORS, a frontend hosted on a different origin will need the deployed backend to allow that frontend origin and credentialed requests. This repository does not make that backend change.
+`VITE_API_PROXY_TARGET` is for `pnpm dev` only. It does not configure a deployed static build.
 
 For Nginx-hosted single-page-app routing, include `try_files $uri $uri/ /index.html;` in the frontend location so opening or refreshing `/discover` and other client routes still serves the React app.

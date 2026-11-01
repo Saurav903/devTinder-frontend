@@ -1,4 +1,6 @@
-const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
+// Both local Vite and the deployed Nginx host expose the Node API under /api.
+// Keeping this same-origin avoids CORS and lets the auth cookie work normally.
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '')
 
 function getMessage(payload) {
   if (typeof payload === 'string') return payload
