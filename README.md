@@ -1,19 +1,28 @@
 # DevTinder frontend
 
-React frontend for the Express/MongoDB backend in `../DevTinder-backend`.
+React client for the Node/Express service in `../DevTinder-backend`. The backend stays untouched.
 
-## Run locally
+## Local development
 
-1. Start the backend: `cd ../DevTinder-backend && pnpm start`
-2. Start this app: `pnpm dev`
-3. Open the localhost URL Vite prints.
+1. Start the API: `cd ../DevTinder-backend && pnpm start`
+2. Start the client: `cd ../DevTinder-frontend && pnpm dev`
+3. Open the localhost URL printed by Vite.
 
-The Vite development proxy routes API calls through the frontend origin, so the backend's `token` cookie works without enabling CORS. To connect to a hosted API instead, set `VITE_API_URL` and configure that server to accept credentialed cross-origin requests.
+Vite proxies the frontend's root API paths to `http://127.0.0.1:7777`, which is the current backend port. This preserves the backend's cookie-based login locally.
 
-## Included flows
+## API integration
 
-- Sign up, sign in, and sign out
-- Discover feed and send `interested` / `ignore` requests
-- Review incoming requests
-- Browse accepted connections
-- Edit age, gender, about, photo URL, and skills
+All implemented backend endpoints are called from `src/api.js`:
+
+- `POST /signup`, `POST /login`, `POST /logout`
+- `GET /profile/view`, `PATCH /profile/edit`
+- `GET /feed?page=&limit=`
+- `POST /request/send/:status/:toUserId`
+- `GET /user/request/received`, `POST /request/review/:status/:requestId`
+- `GET /user/connections`
+
+## Deploying separately
+
+Copy `.env.example` to `.env.production` and set `VITE_API_URL` to the deployed backend origin. The frontend sends cookies with every protected API request.
+
+Because the current backend does not configure CORS, a frontend hosted on a different origin will need the deployed backend to allow that frontend origin and credentialed requests. This repository does not make that backend change.

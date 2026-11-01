@@ -1,18 +1,19 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
-// https://vite.dev/config/
+const backendTarget = process.env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:7777'
+
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/signup': 'http://localhost:3000',
-      '/login': 'http://localhost:3000',
-      '/logout': 'http://localhost:3000',
-      '/profile': 'http://localhost:3000',
-      '/request': 'http://localhost:3000',
-      '/user': 'http://localhost:3000',
-      '/feed': 'http://localhost:3000',
+      '/signup': backendTarget,
+      '/login': backendTarget,
+      '/logout': backendTarget,
+      '/profile': backendTarget,
+      '/request': backendTarget,
+      '/user': backendTarget,
+      '/feed': backendTarget,
     },
   },
 })
