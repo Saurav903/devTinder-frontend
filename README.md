@@ -21,8 +21,17 @@ All implemented backend endpoints are called from `src/api.js`:
 - `GET /user/request/received`, `POST /request/review/:status/:requestId`
 - `GET /user/connections`
 
+## Frontend pages
+
+- `/sign-in`, `/sign-up`
+- `/discover`, `/requests`, `/connections`, `/profile`
+
+The client pages deliberately avoid `/login` and `/signup`, because those remain backend API routes.
+
 ## Deploying separately
 
 Copy `.env.example` to `.env.production` and set `VITE_API_URL` to the deployed backend origin. The frontend sends cookies with every protected API request.
 
 Because the current backend does not configure CORS, a frontend hosted on a different origin will need the deployed backend to allow that frontend origin and credentialed requests. This repository does not make that backend change.
+
+For Nginx-hosted single-page-app routing, include `try_files $uri $uri/ /index.html;` in the frontend location so opening or refreshing `/discover` and other client routes still serves the React app.
